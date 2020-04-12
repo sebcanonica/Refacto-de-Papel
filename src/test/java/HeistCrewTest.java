@@ -33,22 +33,6 @@ public class HeistCrewTest {
         assertThat(crew.nameOf(4)).isEqualTo("Berlin");
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "0, 6, 6, 54",
-            "1, 15, 15, 135",
-            "2, 12, 12, 48",
-            "3, 20, 20, 85",
-            "4, 10, 5, 0",
-            "6, 10, 0, 0"
-    })
-    public void order_fire(int index, int ammo, int expectedFired, int expectedLeft) {
-        enrollFullSquad();
-        int bulletFired = crew.fire(index, ammo);
-        assertThat(bulletFired).isEqualTo(expectedFired);
-        assertThat(crew.ammoLeft(index)).isEqualTo(expectedLeft);
-    }
-
     @Test
     public void heal_wounded() {
         enrollFullSquad();
@@ -65,6 +49,22 @@ public class HeistCrewTest {
             crew.heal(i);
         });
         assertThat(crew.isHealthy(3)).isFalse();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, 6, 6, 54",
+            "1, 15, 15, 135",
+            "2, 12, 12, 48",
+            "3, 20, 20, 85",
+            "4, 10, 5, 0",
+            "6, 10, 0, 0"
+    })
+    public void order_fire(int index, int ammo, int expectedFired, int expectedLeft) {
+        enrollFullSquad();
+        int bulletFired = crew.fire(index, ammo);
+        assertThat(bulletFired).isEqualTo(expectedFired);
+        assertThat(crew.ammoLeft(index)).isEqualTo(expectedLeft);
     }
 
     private void enrollFullSquad() {

@@ -4,17 +4,17 @@ public class HeistCrew {
     private int count;
     final private int MAX_MEMBERS = 7;
 
-    // Just getter
+    // Used as identity
     private String[] codeNames = new String[MAX_MEMBERS];
+
+    // With side effect
+    private boolean[] wounded = new boolean[MAX_MEMBERS];
+    private int surgicalKitsLeft = 3;
 
     // Several correlated members
     private int[] ammoPerClip = new int[MAX_MEMBERS];
     private int[] ammoLeftInLoadedClip = new int[MAX_MEMBERS];
     private int[] clipsLeft = new int[MAX_MEMBERS];
-
-    // With side effect
-    private boolean[] wounded = new boolean[MAX_MEMBERS];
-    private int surgicalKitsLeft = 3;
 
     public int count() {
         return count;
@@ -36,6 +36,22 @@ public class HeistCrew {
         return codeNames[index];
     }
 
+    public void setWounded(int index) {
+        wounded[index] = true;
+    }
+
+    public void heal(int index) {
+        if (surgicalKitsLeft > 0) {
+            surgicalKitsLeft--;
+            wounded[index] = false;
+        }
+    }
+
+    public boolean isHealthy(int index) {
+        return ! wounded[index];
+    }
+
+
     public int fire(int index, int ammo) {
         int leftToFire = ammo;
         while (leftToFire > 0 && (ammoLeftInLoadedClip[index] > 0 || clipsLeft[index] > 0)) {
@@ -53,20 +69,5 @@ public class HeistCrew {
 
     public int ammoLeft(int index) {
         return clipsLeft[index]*ammoPerClip[index]+ammoLeftInLoadedClip[index];
-    }
-
-    public void setWounded(int index) {
-        wounded[index] = true;
-    }
-
-    public void heal(int index) {
-        if (surgicalKitsLeft > 0) {
-            surgicalKitsLeft--;
-            wounded[index] = false;
-        }
-    }
-
-    public boolean isHealthy(int index) {
-        return ! wounded[index];
     }
 }

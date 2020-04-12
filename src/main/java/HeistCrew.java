@@ -36,6 +36,7 @@ public class HeistCrew {
         return codeNames[index];
     }
 
+
     public void setWounded(int index) {
         wounded[index] = true;
     }

@@ -42,14 +42,17 @@ public class HeistCrew {
     }
 
     public void heal(int index) {
-        if (surgicalKitsLeft > 0) {
-            surgicalKitsLeft--;
-            wounded[index] = false;
-        }
+        wounded[index] = !consumeSurgicalKit();
+    }
+
+    private boolean consumeSurgicalKit() {
+        if (surgicalKitsLeft == 0) return false;
+        surgicalKitsLeft--;
+        return true;
     }
 
     public boolean isHealthy(int index) {
-        return ! wounded[index];
+        return !wounded[index];
     }
 
 

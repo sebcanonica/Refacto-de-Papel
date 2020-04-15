@@ -42,6 +42,16 @@ public class HeistCrewTest {
     }
 
     @Test
+    public void can_heal_3_times() {
+        enrollFullSquad();
+        IntStream.range(0, 3).forEach(i -> {
+            crew.setWounded(i);
+            crew.heal(i);
+            assertThat(crew.isHealthy(i)).isTrue();
+        });
+    }
+
+    @Test
     public void cannot_heal_more_than_3_times() {
         enrollFullSquad();
         IntStream.range(0, 4).forEach(i -> {

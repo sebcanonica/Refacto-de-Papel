@@ -22,7 +22,7 @@ public class HeistCrew {
 
     public void enroll(String codeName, int clips, int ammoPerClip) {
         codeNames[count] = codeName;
-        clipsLeft[count] = clips-1;
+        clipsLeft[count] = Math.max(0, clips - 1);
         this.ammoPerClip[count] = ammoPerClip;
         ammoLeftInLoadedClip[count] = ammoPerClip;
         count++;
@@ -69,6 +69,10 @@ public class HeistCrew {
     }
 
     public int ammoLeft(int index) {
-        return clipsLeft[index]*ammoPerClip[index]+ammoLeftInLoadedClip[index];
+        return clipsLeft[index] * ammoPerClip[index] + ammoLeftInLoadedClip[index];
+    }
+
+    public int clipsLeft(int index) {
+        return clipsLeft[index];
     }
 }

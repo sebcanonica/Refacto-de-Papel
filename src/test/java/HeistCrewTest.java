@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.stream.IntStream;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HeistCrewTest {
     private HeistCrew crew = new HeistCrew();
@@ -53,18 +53,19 @@ public class HeistCrewTest {
 
     @ParameterizedTest
     @CsvSource({
-            "0, 6, 6, 54",
-            "1, 15, 15, 135",
-            "2, 12, 12, 48",
-            "3, 20, 20, 85",
-            "4, 10, 5, 0",
-            "6, 10, 0, 0"
+            "0, 6, 6, 54, 8",
+            "1, 15, 15, 135, 4",
+            "2, 12, 12, 48, 7",
+            "3, 20, 20, 85, 5",
+            "4, 10, 5, 0, 0",
+            "6, 10, 0, 0, 0"
     })
-    public void order_fire(int index, int ammo, int expectedFired, int expectedLeft) {
+    public void order_fire(int index, int ammo, int expectedFired, int expectedAmmoLeft, int expectedClipLeft) {
         enrollFullSquad();
         int bulletFired = crew.fire(index, ammo);
         assertThat(bulletFired).isEqualTo(expectedFired);
-        assertThat(crew.ammoLeft(index)).isEqualTo(expectedLeft);
+        assertThat(crew.ammoLeft(index)).isEqualTo(expectedAmmoLeft);
+        assertThat(crew.clipsLeft(index)).isEqualTo(expectedClipLeft);
     }
 
     private void enrollFullSquad() {

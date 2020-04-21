@@ -1,11 +1,13 @@
-import java.util.Arrays;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeistCrew {
     private int count;
     final private int MAX_MEMBERS = 7;
 
     // Used as identity
-    private String[] codeNames = new String[MAX_MEMBERS];
+    private List<CrewMember> crewMembers = new ArrayList<>();
 
     // With side effect
     private boolean[] wounded = new boolean[MAX_MEMBERS];
@@ -21,7 +23,7 @@ public class HeistCrew {
     }
 
     public void enroll(String codeName, int clips, int ammoPerClip) {
-        codeNames[count] = codeName;
+        crewMembers.add(new CrewMember(codeName));
         clipsLeft[count] = Math.max(0, clips - 1);
         this.ammoPerClip[count] = ammoPerClip;
         ammoLeftInLoadedClip[count] = ammoPerClip;
@@ -29,12 +31,24 @@ public class HeistCrew {
     }
 
     public int indexOf(String codeName) {
-        return Arrays.asList(codeNames).indexOf(codeName);
+        return crewMembers.stream()
+                .filter(m -> codeName.equals(m.codeName))
+                .findFirst()
+                .map(m -> crewMembers.indexOf(m))
+                .orElse(-1);
     }
+/*    public int indexOf(String codeName) {
+        return crewMembers.stream()
+                .filter(m -> codeName.equals(m.codeName))
+                .findFirst()
+                .map(m -> crewMembers.indexOf(m))
+                .orElse(-1);
+    }*/
 
     public String nameOf(int index) {
-        return codeNames[index];
+        return crewMembers.get(index).getCodeName();
     }
+
 
 
     public void setWounded(int index) {

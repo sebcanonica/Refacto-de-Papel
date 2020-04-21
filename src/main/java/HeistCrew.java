@@ -10,7 +10,6 @@ public class HeistCrew {
     private List<CrewMember> crewMembers = new ArrayList<>();
 
     // With side effect
-    private boolean[] wounded = new boolean[MAX_MEMBERS];
     private int surgicalKitsLeft = 3;
 
     // Several correlated members
@@ -50,13 +49,13 @@ public class HeistCrew {
     }
 
 
-
     public void setWounded(int index) {
-        wounded[index] = true;
+        crewMembers.get(index).setWounded(true);
     }
 
     public void heal(int index) {
-        wounded[index] = !consumeSurgicalKit();
+        boolean consume = !consumeSurgicalKit();
+        crewMembers.get(index).setWounded(consume);
     }
 
     private boolean consumeSurgicalKit() {
@@ -66,7 +65,7 @@ public class HeistCrew {
     }
 
     public boolean isHealthy(int index) {
-        return !wounded[index];
+        return crewMembers.get(index).isHealthy();
     }
 
 

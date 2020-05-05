@@ -4,7 +4,6 @@ import java.util.List;
 
 public class HeistCrew {
     private int count;
-    final private int MAX_MEMBERS = 7;
 
     // Used as identity
     private List<CrewMember> crewMembers = new ArrayList<>();
@@ -12,20 +11,16 @@ public class HeistCrew {
     // With side effect
     private int surgicalKitsLeft = 3;
 
-    // Several correlated members
-    private int[] ammoPerClip = new int[MAX_MEMBERS];
-    private int[] ammoLeftInLoadedClip = new int[MAX_MEMBERS];
-    private int[] clipsLeft = new int[MAX_MEMBERS];
-
     public int count() {
         return count;
     }
 
     public void enroll(String codeName, int clips, int ammoPerClip) {
         crewMembers.add(new CrewMember(codeName));
-        clipsLeft[count] = Math.max(0, clips - 1);
-        this.ammoPerClip[count] = ammoPerClip;
-        ammoLeftInLoadedClip[count] = ammoPerClip;
+        int index=count;
+        crewMembers.get(index).setClipsLeft(Math.max(0, clips - 1));
+        crewMembers.get(index).setAmmoPerClip(ammoPerClip);
+        crewMembers.get(index).setAmmoLeftInLoadedClip(ammoPerClip);
         count++;
     }
 
@@ -36,6 +31,7 @@ public class HeistCrew {
                 .map(m -> crewMembers.indexOf(m))
                 .orElse(-1);
     }
+
 /*    public int indexOf(String codeName) {
         return crewMembers.stream()
                 .filter(m -> codeName.equals(m.codeName))
@@ -43,7 +39,6 @@ public class HeistCrew {
                 .map(m -> crewMembers.indexOf(m))
                 .orElse(-1);
     }*/
-
     public String nameOf(int index) {
         return crewMembers.get(index).getCodeName();
     }
@@ -70,25 +65,14 @@ public class HeistCrew {
 
 
     public int fire(int index, int ammo) {
-        int leftToFire = ammo;
-        while (leftToFire > 0 && (ammoLeftInLoadedClip[index] > 0 || clipsLeft[index] > 0)) {
-            int firedFromLoadedClip = Math.min(leftToFire, ammoLeftInLoadedClip[index]);
-            leftToFire -= firedFromLoadedClip;
-            ammoLeftInLoadedClip[index] -= firedFromLoadedClip;
-            boolean shouldReload = ammoLeftInLoadedClip[index] == 0 && clipsLeft[index] > 0;
-            if (shouldReload) {
-                ammoLeftInLoadedClip[index] = ammoPerClip[index];
-                clipsLeft[index]--;
-            }
-        }
-        return ammo - leftToFire;
+        return crewMembers.get(index).fire(ammo);
     }
 
     public int ammoLeft(int index) {
-        return clipsLeft[index] * ammoPerClip[index] + ammoLeftInLoadedClip[index];
+        return crewMembers.get(index).ammoLeft();
     }
 
     public int clipsLeft(int index) {
-        return clipsLeft[index];
+        return crewMembers.get(index).getClipsLeft();
     }
 }
